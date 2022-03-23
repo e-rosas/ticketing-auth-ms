@@ -1,3 +1,4 @@
+import { Password } from './../services/password';
 import mongoose from "mongoose";
 
 interface UserAttrs {
@@ -24,6 +25,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+});
+
+//right before an user is saved
+userSchema.pre('save', async function (done) {
+  if(this.isModified('password')) {
+    const hashed = await Password.toHash(this.get('password'));
+    this.set('password', hashed);
+  }
+  done();
 });
 
 userSchema.statics.build = (attrs: UserAttrs) => {
