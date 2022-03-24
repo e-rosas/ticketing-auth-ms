@@ -34,7 +34,7 @@ router.post(
         id: newUser.id,
         email: newUser.email,
       },
-      "sdgre"
+      process.env.JWT_KEY!
     );
 
     // store on session object
